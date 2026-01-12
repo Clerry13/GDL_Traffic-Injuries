@@ -1,0 +1,112 @@
+**data are available: http://www.ahw.gov.ab.ca/IHDA_Retrieval/selectCategory.do 
+*-> injury 
+*-> injury- age-sex specific emergency department visit rates (monthly)
+*select each age group (not all), male & female (not both), all dates available, and traffic related injury (1)
+*import csv into selected software
+
+
+* Ensure data are sorted chronologically
+rename*,lower
+split year, parse("_")
+rename year2 month
+rename year1 year
+sort year month
+
+* Continuous time variable (months since start)
+gen t = _n
+
+* Indicator for post-policy period (July 2023 onward)
+gen post = (year > 2023 | (year == 2023 & month >= 7))
+
+* Time since policy implementation (0 before policy)
+gen time_after = 0
+replace time_after = t - t[post == 1][1] if post == 1
+
+label variable post "Immediate post-policy indicator"
+label variable time_after "Months since policy implementation"
+
+encode age, gen(age_grp)
+encode sex, gen(gender)
+
+*regression analysis
+*test whether poisson or nbreg satisfies assumptions
+poisson visits post time_after, exposure(population)
+nbreg visits post time_after, exposure(population)
+estat gof, pearson
+*evidence of zero inflation in poisson models determined
+*All Traffic Injuries
+* Unadjusted
+nbreg visits post time_after, ///
+    exposure(population) irr
+
+* Adjusted
+nbreg visits post time_after ///
+    i.agegrp i.gender, ///
+    exposure(population) irr
+
+*using similar cleaning process above, import CSVs for each type of traffic injury ED visits and append to original data file
+* Unadjusted
+nbreg visits post time_after ///
+    if driver == 1, ///
+    exposure(population) irr
+
+* Adjusted
+nbreg visits post time_after ///
+    i.agegrp i.gender ///
+    if driver == 1, ///
+    exposure(population) irr
+
+* Unadjusted
+nbreg visits post time_after ///
+    if passenger == 1, ///
+    exposure(population) irr
+
+* Adjusted
+nbreg visits post time_after ///
+    i.agegrp i.gender ///
+    if passenger == 1, ///
+    exposure(population) irr
+
+* Unadjusted
+nbreg visits post time_after ///
+    if motorcycledr == 1, ///
+    exposure(population) irr
+
+* Adjusted
+nbreg visits post time_after ///
+    i.agegrp i.gender ///
+    if motorcycledr == 1, ///
+    exposure(population) irr
+
+* Unadjusted
+nbreg visits post time_after ///
+    if motorcyclepas == 1, ///
+    exposure(population) irr
+
+* Adjusted
+nbreg visits post time_after ///
+    i.agegrp i.gender ///
+    if motorcyclepas == 1, ///
+    exposure(population) irr
+
+* Unadjusted
+nbreg visits post time_after ///
+    if pedest == 1, ///
+    exposure(population) irr
+
+* Adjusted
+nbreg visits post time_after ///
+    i.agegrp i.gender ///
+    if pedest == 1, ///
+    exposure(population) irr
+
+* Unadjusted
+nbreg visits post time_after ///
+    if other == 1, ///
+    exposure(population) irr
+
+* Adjusted
+nbreg visits post time_after ///
+    i.agegrp i.gender ///
+    if other == 1, ///
+    exposure(population) irr
