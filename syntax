@@ -3,7 +3,7 @@
 *-> injury- age-sex specific emergency department visit rates (monthly)
 *select each age group (not all), male & female (not both), all dates available, and traffic related injury (1)
 *import csv into selected software
-
+*analysed in STATA 16 IC
 
 * Ensure data are sorted chronologically
 rename*,lower
