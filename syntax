@@ -45,7 +45,7 @@ replace season=4 if month_num==11
 *season1 = winter, season 2= spring, season 3= summer, season 4=fall
 
 *clean age and sex vars
-encode age, gen(age_grp)
+encode age, gen(agegrp)
 encode sex, gen(gender)
 
 *regression analysis
