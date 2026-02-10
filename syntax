@@ -56,7 +56,7 @@ estat gof, pearson
 *evidence of zero inflation in poisson models determined
 * All Traffic Injuries
 zinb visits post time_after, exposure(population) inflate(post time_after) irr
-zinb visits post time_after i.agegrp i.gender, exposure(population) inflate(post time_after) irr
+zinb visits post time_after i.agegrp i.gender i.season, exposure(population) inflate(post time_after) irr
 
 * Driver Injuries
 zinb visits post time_after if driver == 1, exposure(population) inflate(post time_after) irr
