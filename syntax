@@ -54,79 +54,31 @@ poisson visits post time_after, exposure(population)
 nbreg visits post time_after, exposure(population)
 estat gof, pearson
 *evidence of zero inflation in poisson models determined
-*All Traffic Injuries
-* Unadjusted
-nbreg visits post time_after, ///
-    exposure(population) irr
+* All Traffic Injuries
+zinb visits post time_after, exposure(population) inflate(post time_after) irr
+zinb visits post time_after i.agegrp i.gender, exposure(population) inflate(post time_after) irr
 
-* Adjusted
-nbreg visits post time_after ///
-    i.agegrp i.gender, ///
-    exposure(population) irr
+* Driver Injuries
+zinb visits post time_after if driver == 1, exposure(population) inflate(post time_after) irr
+zinb visits post time_after i.agegrp i.gender i.season if driver == 1, exposure(population) inflate(post time_after) irr
 
-*using similar cleaning process above, import CSVs for each type of traffic injury ED visits and append to original data file
-* Unadjusted
-nbreg visits post time_after ///
-    if driver == 1, ///
-    exposure(population) irr
+* Passenger Injuries
+zinb visits post time_after if passenger == 1, exposure(population) inflate(post time_after) irr
+zinb visits post time_after i.agegrp i.gender i.season if passenger == 1, exposure(population) inflate(post time_after) irr
 
-* Adjusted
-nbreg visits post time_after ///
-    i.agegrp i.gender i.season ///
-    if driver == 1, ///
-    exposure(population) irr
+* Motorcycle Driver Injuries
+zinb visits post time_after if motorcycledr == 1, exposure(population) inflate(post time_after) irr
+zinb visits post time_after i.agegrp i.gender i.season if motorcycledr == 1, exposure(population) inflate(post time_after) irr
 
-* Unadjusted
-nbreg visits post time_after ///
-    if passenger == 1, ///
-    exposure(population) irr
+* Motorcycle Passenger Injuries
+zinb visits post time_after if motorcyclepas == 1, exposure(population) inflate(post time_after) irr
+zinb visits post time_after i.agegrp i.gender i.season if motorcyclepas == 1, exposure(population) inflate(post time_after) irr
 
-* Adjusted
-nbreg visits post time_after ///
-    i.agegrp i.gender i.season ///
-    if passenger == 1, ///
-    exposure(population) irr
+* Pedestrian Injuries
+zinb visits post time_after if pedest == 1, exposure(population) inflate(post time_after) irr
+zinb visits post time_after i.agegrp i.gender i.season if pedest == 1, exposure(population) inflate(post time_after) irr
 
-* Unadjusted
-nbreg visits post time_after ///
-    if motorcycledr == 1, ///
-    exposure(population) irr
+* Other Traffic Injuries
+zinb visits post time_after if other == 1, exposure(population) inflate(post time_after) irr
+zinb visits post time_after i.agegrp i.gender i.season if other == 1, exposure(population) inflate(post time_after) irr
 
-* Adjusted
-nbreg visits post time_after ///
-    i.agegrp i.gender i.season ///
-    if motorcycledr == 1, ///
-    exposure(population) irr
-
-* Unadjusted
-nbreg visits post time_after ///
-    if motorcyclepas == 1, ///
-    exposure(population) irr
-
-* Adjusted
-nbreg visits post time_after ///
-    i.agegrp i.gender i.season ///
-    if motorcyclepas == 1, ///
-    exposure(population) irr
-
-* Unadjusted
-nbreg visits post time_after ///
-    if pedest == 1, ///
-    exposure(population) irr
-
-* Adjusted
-nbreg visits post time_after ///
-    i.agegrp i.gender i.season  ///
-    if pedest == 1, ///
-    exposure(population) irr
-
-* Unadjusted
-nbreg visits post time_after ///
-    if other == 1, ///
-    exposure(population) irr
-
-* Adjusted
-nbreg visits post time_after ///
-    i.agegrp i.gender i.season ///
-    if other == 1, ///
-    exposure(population) irr
