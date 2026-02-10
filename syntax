@@ -25,6 +25,26 @@ replace time_after = t - t[post == 1][1] if post == 1
 label variable post "Immediate post-policy indicator"
 label variable time_after "Months since policy implementation"
 
+*Generate season variable based on month variable
+describe month
+gen month_num = month(dofm(month))
+tab month_num
+gen season=. 
+replace season=1 if month_num==12
+replace season=1 if month_num==1
+replace season=1 if month_num==2
+replace season=2 if month_num==3
+replace season=2 if month_num==4
+replace season=2 if month_num==5
+replace season=3 if month_num==6
+replace season=3 if month_num==7
+replace season=3 if month_num==8
+replace season=4 if month_num==9
+replace season=4 if month_num==10
+replace season=4 if month_num==11
+*season1 = winter, season 2= spring, season 3= summer, season 4=fall
+
+*clean age and sex vars
 encode age, gen(age_grp)
 encode sex, gen(gender)
 
@@ -52,7 +72,7 @@ nbreg visits post time_after ///
 
 * Adjusted
 nbreg visits post time_after ///
-    i.agegrp i.gender ///
+    i.agegrp i.gender i.season ///
     if driver == 1, ///
     exposure(population) irr
 
@@ -63,7 +83,7 @@ nbreg visits post time_after ///
 
 * Adjusted
 nbreg visits post time_after ///
-    i.agegrp i.gender ///
+    i.agegrp i.gender i.season ///
     if passenger == 1, ///
     exposure(population) irr
 
@@ -74,7 +94,7 @@ nbreg visits post time_after ///
 
 * Adjusted
 nbreg visits post time_after ///
-    i.agegrp i.gender ///
+    i.agegrp i.gender i.season ///
     if motorcycledr == 1, ///
     exposure(population) irr
 
@@ -85,7 +105,7 @@ nbreg visits post time_after ///
 
 * Adjusted
 nbreg visits post time_after ///
-    i.agegrp i.gender ///
+    i.agegrp i.gender i.season ///
     if motorcyclepas == 1, ///
     exposure(population) irr
 
@@ -96,7 +116,7 @@ nbreg visits post time_after ///
 
 * Adjusted
 nbreg visits post time_after ///
-    i.agegrp i.gender ///
+    i.agegrp i.gender i.season  ///
     if pedest == 1, ///
     exposure(population) irr
 
@@ -107,6 +127,6 @@ nbreg visits post time_after ///
 
 * Adjusted
 nbreg visits post time_after ///
-    i.agegrp i.gender ///
+    i.agegrp i.gender i.season ///
     if other == 1, ///
     exposure(population) irr
